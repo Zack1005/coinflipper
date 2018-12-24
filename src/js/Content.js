@@ -7,7 +7,6 @@ class Content extends React.Component {
     super(props);
   }
   render() {
-    console.log(this.props.castHouseBetting)
     return (
       <div>
         { !this.props.housebetted?
@@ -22,6 +21,8 @@ class Content extends React.Component {
           : <label>Gambler Betted</label>
         }
         <p>Gambler account: {this.props.gambler}</p>
+        <label>Result:</label>
+        <p>{this.props.tips}</p>
       </div>
     )
   }

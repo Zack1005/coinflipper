@@ -38,54 +38,17 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    // TODO: Refactor with promise chain
-    // this.web3.eth.getCoinbase((err, account) => {
-    //   this.setState({ account })
-    //   this.coinFlipper.deployed().then((electionInstance) => {
-    //     this.electionInstance = electionInstance
-    //     this.watchEvents()
-    //     this.electionInstance.candidatesCount().then((candidatesCount) => {
-    //       for (var i = 1; i <= candidatesCount; i++) {
-    //         this.electionInstance.candidates(i).then((candidate) => {
-    //           const candidates = [...this.state.candidates]
-    //           candidates.push({
-    //             id: candidate[0],
-    //             name: candidate[1],
-    //             voteCount: candidate[2]
-    //           });
-    //           this.setState({ candidates: candidates })
-    //         });
-    //       }
-    //     })
-    //     this.electionInstance.voters(this.state.account).then((hasVoted) => {
-    //       console.log("false")
-    //       this.setState({ hasVoted, loading: false })
-    //     })
-    //   })
-    // })
+
     this.coinFlipper.deployed().then((instance) => {
       console.log(instance)
       this.coinFlipperInstance=instance
       this.setState({loading:false})
+    //  this.web3.eth.getAccounts().then(e => {let firstAcc=e[0]; console.log(firstAcc)})
+    //  this.setState({gambler:this.web3.eth.accounts[1]})
     })
   }
 
-  // watchEvents() {
-  //   // TODO: trigger event when vote is counted, not when component renders
-  //   this.electionInstance.votedEvent({}, {
-  //     fromBlock: 0,
-  //     toBlock: 'latest'
-  //   }).watch((error, event) => {
-  //     this.setState({ voting: false })
-  //   })
-  // }
 
-  // castVote(candidateId) {
-  //   this.setState({ voting: true })
-  //   this.electionInstance.vote(candidateId, { from: this.state.account }).then((result) =>
-  //     this.setState({ hasVoted: true })
-  //   )
-  // }
   castHouseBetting(money){
     this.setState({betting:true})
     this.coinFlipperInstance.HouseBetting({from: this.state.house,value:this.web3.toWei(parseInt(money), "ether"),gas:420000})
@@ -94,10 +57,13 @@ class App extends React.Component {
   castGamblerBetting(money,guess){
     this.setState({betting:true})
     this.coinFlipperInstance.betAndFlip(guess,{from:this.state.gambler,value:this.web3.toWei(parseInt(money), "ether"),gas:420000})
+    this.coinFlipperInstance.getResultOfLastFlip().then(tip => {this.setState({tips:tip});})
+    
   }
 
   render() {
     //TODO: 
+
     return (
       <div class='row'>
         <div class='col-lg-12 text-center' >
@@ -109,7 +75,8 @@ class App extends React.Component {
                    gamblerbetted={this.state.gamblerbetted}
                    housebetted={this.state.housebetted}
                    castGamblerBetting={this.castGamblerBetting}
-                   castHouseBetting={this.castHouseBetting}/>
+                   castHouseBetting={this.castHouseBetting}
+                   tips={this.state.tips}/>
          
         </div>
       </div>
