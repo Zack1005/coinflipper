@@ -30,7 +30,7 @@
 
 ### BetAndFlip
 
-![1545890601658](C:\Users\Zack\AppData\Roaming\Typora\typora-user-images\1545890601658.png)
+![1545890601658](https://github.com/Zack1005/coinflipper/blob/master/procedure/TIM图片20181227140301.png)
 
 这是给gambler用的下注以及竞猜的接口。gambler需要向函数输入betnumber变量，表示猜的是0还是1，接下来，首先是要判断gambler下注是否超过2^128-1，其次判断是否比账户余额要多，记下来判断是否有下注，最后判断输入的变量是否合法（0或者1）。
 
