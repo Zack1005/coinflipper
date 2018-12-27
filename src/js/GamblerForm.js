@@ -15,6 +15,7 @@ class GamblerForm extends React.Component {
         <div class='form-group'>
           <label>Put the money you wanna bet here in eth</label>
           <select ref={(input) => this.bettingnumber = input} class='form-control'>
+           <option value="0">0 eth</option>
            <option value="1">1 eth</option>
            <option value="2">2 eth</option>
            <option value="3">3 eth</option>

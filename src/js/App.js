@@ -11,13 +11,16 @@ class App extends React.Component {
     super(props)
  
     this.state = {
-      gambler:'0xd9C72935A9baDF366f4866B052be2D1959a28B28',
-      house:'0x346b4950810B8df3f92ad7d120E4e42f8A0d004B',
+    //  gambler:'0xd9C72935A9baDF366f4866B052be2D1959a28B28',
+    //  house:'0x346b4950810B8df3f92ad7d120E4e42f8A0d004B',
+      gambler:'',
+      house:'',
       betting:false,
       loading:true,
       housebetted:false,
       gamblerbetted:false,
       tips:"",
+      contractBalance:0,
     }
     if (typeof web3 != 'undefined') {
       this.web3Provider = web3.currentProvider
@@ -32,9 +35,9 @@ class App extends React.Component {
 
     this.castHouseBetting=this.castHouseBetting.bind(this)
     this.castGamblerBetting=this.castGamblerBetting.bind(this)
+    this.getResult=this.getResult.bind(this)
+    this.handleAccountInput=this.handleAccountInput.bind(this)
 
-    // this.castVote = this.castVote.bind(this)
-    // this.watchEvents = this.watchEvents.bind(this)
   }
 
   componentDidMount() {
@@ -43,8 +46,6 @@ class App extends React.Component {
       console.log(instance)
       this.coinFlipperInstance=instance
       this.setState({loading:false})
-    //  this.web3.eth.getAccounts().then(e => {let firstAcc=e[0]; console.log(firstAcc)})
-    //  this.setState({gambler:this.web3.eth.accounts[1]})
     })
   }
 
@@ -52,17 +53,31 @@ class App extends React.Component {
   castHouseBetting(money){
     this.setState({betting:true})
     this.coinFlipperInstance.HouseBetting({from: this.state.house,value:this.web3.toWei(parseInt(money), "ether"),gas:420000})
+  //  this.coinFlipperInstance.getEndowmentBalance().then(c=>{var n=c.toNumber();his.setState(contractBalance:n)})
+  //  this.coinFlipperInstance.getEndowmentBalance().then(console.log)
   }
 
   castGamblerBetting(money,guess){
     this.setState({betting:true})
     this.coinFlipperInstance.betAndFlip(guess,{from:this.state.gambler,value:this.web3.toWei(parseInt(money), "ether"),gas:420000})
-    this.coinFlipperInstance.getResultOfLastFlip().then(tip => {this.setState({tips:tip});})
+  //  
     
+  }
+  getResult(){
+    this.coinFlipperInstance.getResultOfLastFlip().then(tip => {this.setState({tips:tip})})
+  }
+
+  handleAccountInput(type,e){
+    var account=e.target.value
+    console.log(account)
+    if (type==='gambler'){
+      this.setState({gambler:account})
+    }else{
+      this.setState({house:account})
+    }
   }
 
   render() {
-    //TODO: 
 
     return (
       <div class='row'>
@@ -76,7 +91,10 @@ class App extends React.Component {
                    housebetted={this.state.housebetted}
                    castGamblerBetting={this.castGamblerBetting}
                    castHouseBetting={this.castHouseBetting}
-                   tips={this.state.tips}/>
+                   tips={this.state.tips}
+                   contractBalance={this.state.contractBalance}
+                   getResult={this.getResult}
+                   handleAccountInput={this.handleAccountInput}/>
          
         </div>
       </div>
